@@ -1,6 +1,7 @@
 # Better-localStorage
 Better-localStorage is a lightweight NPM package that provides a simple and efficient alternative to the native localStorage API using indexedDB. This package offers several benefits over the native localStorage API, including the ability to store larger amounts of data, asynchronous and non-blocking operations, on-demand loading, and support for storing JavaScript object data. With Better-localStorage, you can enhance the storage capabilities of your web applications while maintaining optimal performance.
 
+
 # Key Features
 -   Asynchronous and non-blocking operations.
 -   Support for storing large amounts of data.
@@ -22,8 +23,8 @@ To use Better-localStorage in your JavaScript code, you need to import the packa
 const MyLocalStorage = require('better-localstorage');
 ```
 
-## Initializing the Database
-
+## Initializing the API
+Start of by creating an instance of your better-localStorage API
 ```js
 const myStorage = new MyLocalStorage();
 ```
