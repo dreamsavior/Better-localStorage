@@ -72,13 +72,9 @@ myStorage.off("change");
 ### Event list
 |Event Name|Description|Callback Function Arguments|
 |--- |--- |--- |
-|beforeSet|Triggered before a value is set in the local database.|`key` (String): The key of the key-value pair being set.|
-|||`value` (*): The new value being set.|
-|change|Triggered when a value in the local database is changed.|`key` (String): The key of the key-value pair that changed.|
-|||`newValue` (*): The new value after the change.|
-|||`oldValue` (*): The previous value before the change.|
-|set|Triggered after a value is successfully set in the database.|`key` (String): The key of the key-value pair that was set.|
-|||`value` (*): The value that was successfully set.|
+|beforeSet|Triggered before a value is set in the local database.|`key` (String): The key of the key-value pair being set.<br /><br />`value` (*): The new value being set.|
+|change|Triggered when a value in the local database is changed.|`key` (String): The key of the key-value pair that changed.<br /><br />`newValue` (*): The new value after the change.<br /><br />`oldValue` (*): The previous value before the change.|
+|set|Triggered after a value is successfully set in the database.|`key` (String): The key of the key-value pair that was set.<br /><br />`value` (*): The value that was successfully set.|
 |beforeDelete|Triggered before a value is deleted from the local database.|`key` (String): The key of the key-value pair being deleted.|
 |delete|Triggered after a value is successfully deleted from the database.|`key` (String): The key of the key-value pair that was deleted.|
 |beforeClear|Triggered before the local database is cleared.|-|
@@ -106,12 +102,17 @@ myStorage.on("beforeSet.scope2", (key, value) => {
 
 // Triggering the event
 myStorage.set("someKey", "someValue");
+// prints:
+// Before set event in scope1: someKey - someValue
+// Before set event in scope2: someKey - someValue
 
 // Removing a specific namespaced event listener
 myStorage.off("beforeSet.scope1");
 
 // Triggering the event again
 myStorage.set("anotherKey", "anotherValue");
+// prints:
+// Before set event in scope2: anotherKey - anotherValue
 
 ```
 In this example, we add two namespaced event listeners for the "beforeSet" event: one in the "scope1" namespace and another in the "scope2" namespace. When the `set()` method is called, both event listeners will be triggered and their respective messages will be logged to the console.
