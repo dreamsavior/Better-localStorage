@@ -1,0 +1,23 @@
+{
+  "name": "better-localstorage",
+  "version": "1.0.0",
+  "description": "Asynchronous local storage with indexed-db.\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b storage to store key-value pair with indexedDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dreamsavior/Better-localStorage.git"
+  },
+  "keywords": [
+    "localStorage",
+    "indexedDB"
+  ],
+  "author": "dreamsavior@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dreamsavior/Better-localStorage/issues"
+  },
+  "homepage": "https://github.com/dreamsavior/Better-localStorage#readme"
+}
