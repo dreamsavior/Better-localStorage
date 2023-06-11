@@ -158,7 +158,7 @@ myStorage.off("change");
 
 
 ## Event with Namespace
-Better-localStorage package supports name-spaced events, which function similarly to jQuery's event system. With name-spaced events, you can add and remove event listeners that are specific to a particular namespace, without affecting other listeners bound to the same event type.
+Better-localStorage package supports namespaced events, which function similarly to jQuery's event system. With a namespaced events, you can add and remove event listeners that are specific to a particular namespace, without affecting other listeners bound to the same event type.
 
 
 ```js
