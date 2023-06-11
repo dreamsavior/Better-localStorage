@@ -72,9 +72,9 @@ myStorage.off("change");
 ### Event list
 |Event Name|Description|Callback Function Arguments|
 |--- |--- |--- |
-|beforeSet|Triggered before a value is set in the local database.|`key` (String): The key of the key-value pair being set.<br /><br />`value` (*): The new value being set.|
-|change|Triggered when a value in the local database is changed.|`key` (String): The key of the key-value pair that changed.<br /><br />`newValue` (*): The new value after the change.<br /><br />`oldValue` (*): The previous value before the change.|
-|set|Triggered after a value is successfully set in the database.|`key` (String): The key of the key-value pair that was set.<br /><br />`value` (*): The value that was successfully set.|
+|beforeSet|Triggered before a value is set in the local database.|`key` (String): The key of the key-value pair being set.<br /><br />`value` (any): The new value being set.|
+|change|Triggered when a value in the local database is changed.|`key` (String): The key of the key-value pair that changed.<br /><br />`newValue` (any): The new value after the change.<br /><br />`oldValue` (any): The previous value before the change.|
+|set|Triggered after a value is successfully set in the database.|`key` (String): The key of the key-value pair that was set.<br /><br />`value` (any): The value that was successfully set.|
 |beforeDelete|Triggered before a value is deleted from the local database.|`key` (String): The key of the key-value pair being deleted.|
 |delete|Triggered after a value is successfully deleted from the database.|`key` (String): The key of the key-value pair that was deleted.|
 |beforeClear|Triggered before the local database is cleared.|-|

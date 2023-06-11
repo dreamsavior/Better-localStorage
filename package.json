@@ -1,7 +1,7 @@
 {
   "name": "better-localstorage",
-  "version": "1.0.1",
-  "description": "Asynchronous local storage with indexed-db.\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b storage to store key-value pair with indexedDB",
+  "version": "1.0.2",
+  "description": "Asynchronous key-value pair local storage with indexed-db.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,19 @@
   },
   "keywords": [
     "localStorage",
-    "indexedDB"
+    "indexedDB",
+    "event",
+    "db",
+    "browser",
+    "local",
+    "database",
+    "storage",
+    "asynchronous",
+    "frontend",
+    "cache",
+    "config",
+    "configuration",
+    "scoped"
   ],
   "author": "dreamsavior@gmail.com",
   "license": "MIT",
