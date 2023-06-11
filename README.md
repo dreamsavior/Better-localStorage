@@ -57,7 +57,82 @@ To delete a value from the database, you can use either the `delete()` or `remov
 await myStorage.delete("someKey");
 ```
 
-## Events
+# Methods
+The Better-localStorage package provides a set of methods that offer enhanced functionality compared to the native localStorage API. Here's a detailed explanation of each available method:
+
+### `set(key, value)` (alias: `setItem(key, value)`)
+
+The `set()` method allows you to store a value in the local database. It takes a `key` as a string and a `value` that can be of any type supported by indexedDB. This method asynchronously sets the provided key-value pair in the database.
+
+**Example:**
+```js
+await myStorage.set("key", "value");
+// Value successfully stored in the database
+```
+
+### `get(key)` (alias: `getItem(key)`)
+
+The `get()` method retrieves the value associated with a given key from the local database. It takes a `key` as a string and returns the corresponding value. If the key doesn't exist in the database, it returns `undefined`.
+
+**Example:**
+```js
+const value = await myStorage.get("key");
+// Value retrieved from the database
+``` 
+
+### `delete(key)` (alias: `removeItem(key)`)
+
+The `delete()` method removes a key-value pair from the local database based on the provided key.
+
+**Example:**
+```js
+await myStorage.delete("key");
+// Key-value pair successfully deleted from the database
+``` 
+
+### `clear()`
+
+The `clear()` method clears the entire local database, removing all stored key-value pairs.
+
+**Example:**
+```js
+await myStorage.clear();
+// Local database successfully cleared
+``` 
+
+### `on(eventName, callback)`
+
+The `on()` method allows you to add an event listener for a specific event. It takes an `eventName` as a string and a `callback` function to be executed when the event is triggered. Multiple event listeners can be registered for the same event.
+
+**Example:**
+```js
+myStorage.on("beforeSet", (key, value) => {
+  // Event listener callback function
+});
+``` 
+
+### `one(eventName, callback)`
+
+The `one()` method is similar to `on()`, but it adds a one-time event listener. The event listener is automatically removed after being triggered once.
+
+**Example:**
+```js
+myStorage.one("beforeSet", (key, value) => {
+  // Event listener callback function
+});
+``` 
+
+### `off(eventName)`
+
+The `off()` method removes one or all event listeners associated with a specific event. It takes the `eventName` as a string and removes the corresponding event listener(s).
+
+**Example:**
+```js
+myStorage.off("beforeSet");
+// Removes all event listeners for "beforeSet" event
+``` 
+
+# Events
 
 Better-localStorage provides event listeners for various events. You can use the `on()`, `one()`, and `off()` methods to manage the event listeners:
 ```js
@@ -70,7 +145,7 @@ myStorage.on("change", (key, newValue, oldValue) => {
 myStorage.off("change");
 ```
 
-### Event list
+## Event list
 |Event Name|Description|Callback Function Arguments|
 |--- |--- |--- |
 |beforeSet|Triggered before a value is set in the local database.|`key` (String): The key of the key-value pair being set.<br /><br />`value` (any): The new value being set.|
@@ -82,7 +157,7 @@ myStorage.off("change");
 |clear|Triggered after the local database is successfully cleared.|-|
 
 
-### Event with Namespace
+## Event with Namespace
 Better-localStorage package supports name-spaced events, which function similarly to jQuery's event system. With name-spaced events, you can add and remove event listeners that are specific to a particular namespace, without affecting other listeners bound to the same event type.
 
 
