@@ -1,8 +1,8 @@
 {
   "name": "better-localstorage",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Asynchronous key-value pair local storage with indexed-db.",
-  "main": "index.js",
+  "main": "localstorage.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

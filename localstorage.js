@@ -127,7 +127,7 @@ class BasicEventHandler {
  *    "someObject": "with the value"
  * }
  */
-const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
+const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
     const evt = new BasicEventHandler();
 	this.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
 	this.dbName = dbName || "commonDB";
@@ -179,6 +179,8 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
      * @returns {Promise<Event>} - Transaction event
      */
     this.set = async (key, value) => {
+        if (typeof key !== "string") throw new Error("Invalid key. Key must be a string!")
+
         await this.untilReady();
         evt.trigger("beforeSet", key, value);
         var isChanged = false;
@@ -187,8 +189,8 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
             prevValue = await this.get(key);
             if (JSON.stringify(prevValue) !== JSON.stringify(value)) isChanged = true;
         }
-        return new Promise((resolve, reject) => {
-            initTransaction();
+        return new Promise(async (resolve, reject) => {
+            await initTransaction();
             var request = this.store.put({id: key, value: value});
             request.onsuccess = (e)=> {
                 evt.trigger("set", key, value);
@@ -211,9 +213,11 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
      * @returns {Promise<*>} - The value
      */
     this.get = async (key) => {
+        if (typeof key !== "string") throw new Error("Invalid key. Key must be a string!")
+
         await this.untilReady();
-        return new Promise((resolve, reject) => {
-            initTransaction();
+        return new Promise(async (resolve, reject) => {
+            await initTransaction();
             var request = this.store.get(key);
             request.onsuccess = (e)=> {
                 if (!request.result) return resolve();
@@ -227,6 +231,27 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
 
     this.getItem = this.get;
 
+    this.getAll = async () => {
+        await this.untilReady();
+        return new Promise(async (resolve, reject) => {
+            await initTransaction();
+            var request = this.store.getAll();
+            request.onsuccess = (e)=> {
+                if (!request.result) return resolve();
+                let result = {}
+                for (let i=0; i<request.result.length; i++) {
+                    result[request.result[i].id] = request.result[i].value;
+                }
+
+                resolve(result)
+            }
+            request.onerror = (e)=> {
+                reject(e)
+            }
+        })
+    }
+
+
     /**
      * Delete a record from local DB.
      * @async
@@ -234,11 +259,13 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
      * @returns {Promise<Event>} - Transaction event
      */
     this.delete = async (key) => {
+        if (typeof key !== "string") throw new Error("Invalid key. Key must be a string!")
+
         await this.untilReady();
         evt.trigger("beforeDelete", key);
 
-        return new Promise((resolve, reject) => {
-            initTransaction();
+        return new Promise(async (resolve, reject) => {
+            await initTransaction();
             var request = this.store.delete(key);
             request.onsuccess = (e)=> {
                 evt.trigger("delete", key);
@@ -259,8 +286,8 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
         await this.untilReady();
         evt.trigger("beforeClear");
 
-        return new Promise((resolve, reject) => {
-            initTransaction();
+        return new Promise(async (resolve, reject) => {
+            await initTransaction();
             var request = this.store.clear();
             request.onsuccess = (e)=> {
                 evt.trigger("clear", key);
@@ -286,4 +313,4 @@ const SimpleDB = function(dbName="commonDB", tableName="keyValuePairs") {
 }
 
 
-module.exports = SimpleDB;
+module.exports = BLS;
