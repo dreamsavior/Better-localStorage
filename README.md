@@ -80,6 +80,15 @@ const value = await myStorage.get("key");
 // Value retrieved from the database
 ``` 
 
+### `getAll()`
+
+Get all record into a key-value pair object
+
+**Example:**
+```js
+console.log(await myStorage.getAll());
+``` 
+
 ### `delete(key)` (alias: `removeItem(key)`)
 
 The `delete()` method removes a key-value pair from the local database based on the provided key.
