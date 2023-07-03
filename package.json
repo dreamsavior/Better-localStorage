@@ -1,6 +1,6 @@
 {
   "name": "better-localstorage",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Asynchronous key-value pair local storage with indexed-db.",
   "main": "localstorage.js",
   "scripts": {
