@@ -31,5 +31,6 @@
   "bugs": {
     "url": "https://github.com/dreamsavior/Better-localStorage/issues"
   },
-  "homepage": "https://github.com/dreamsavior/Better-localStorage#readme"
+  "homepage": "https://github.com/dreamsavior/Better-localStorage#readme",
+  "types": "./index.d.ts"
 }

@@ -132,18 +132,20 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
 	this.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
 	this.dbName = dbName || "commonDB";
 	this.tableName = tableName || "keyValuePairs";
-	this.readyPromise = new Promise((resolve) => {
-		this.resolver = resolve;
-	});
+	// this.readyPromise = new Promise((resolve) => {
+	// 	this.resolver = resolve;
+	// });
 
     
     const initTransaction = async () => {
         this.tx = this.db.transaction(this.tableName, "readwrite");
         this.store = this.tx.objectStore(this.tableName);
     }
+    var initPromise;
 
     const init = async () => {
-        return new Promise((resolve, reject) => {
+        if (initPromise) return initPromise;
+        initPromise = new Promise((resolve, reject) => {
             this.connection = indexedDB.open(this.dbName, 1);
             this.connected = false;
         
@@ -160,10 +162,11 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
                 this.store = this.tx.objectStore(this.tableName);
                 //this.index = this.store.index("NameIndex");
                 this.isInitialized = true;
-                this.resolver(this);
+                //this.resolver(this);
                 resolve(this);
             }
-        })
+        });
+        return initPromise;
     }
 
     this.untilReady = async () => {
