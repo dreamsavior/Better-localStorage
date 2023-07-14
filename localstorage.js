@@ -139,13 +139,14 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
     
     const initTransaction = async () => {
         return new Promise((resolve, reject) => {
-            this.tx = this.db.transaction(this.tableName, "readwrite");
-            this.tx.oncomplete(()=> {
-                resolve(this.tx)
+            const transaction = this.db.transaction([this.tableName], "readwrite");
+            transaction.oncomplete(()=> {
+                resolve()
             })
-            this.tx.onerror((e)=> {
+            transaction.onerror((e)=> {
                 reject(new Error("Cannot open idb transaction"))
             });
+            this.tx = transaction;
             this.store = this.tx.objectStore(this.tableName);
         })
     }
