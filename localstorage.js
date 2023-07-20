@@ -138,42 +138,67 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
 
     
     const initTransaction = async () => {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction([this.tableName], "readwrite");
-            transaction.oncomplete(()=> {
-                resolve()
-            })
-            transaction.onerror((e)=> {
-                reject(new Error("Cannot open idb transaction"))
-            });
-            this.tx = transaction;
-            this.store = this.tx.objectStore(this.tableName);
-        })
+        const result = {}
+
+        result.tx = this.db.transaction(this.tableName, "readwrite");
+        result.store = result.tx.objectStore(this.tableName)
+
+        //this.tx = result.tx;
+        //this.store = result.store;
+        return result;
     }
     var initPromise;
 
     const init = async () => {
         if (initPromise) return initPromise;
         initPromise = new Promise((resolve, reject) => {
-            this.connection = indexedDB.open(this.dbName, 1);
-            this.connected = false;
-        
-            this.connection.onupgradeneeded = () =>{
-                this.db = this.connection.result;
-                this.store = this.db.createObjectStore(this.tableName, {keyPath: "id"});
-                //this.index = this.store.createIndex("NameIndex", ["name.last", "name.first"]);
-            };
-        
-            this.connection.onsuccess = () => {
-                // Start a new transaction
-                this.db = this.connection.result;
-                this.tx = this.db.transaction(this.tableName, "readwrite");
-                this.store = this.tx.objectStore(this.tableName);
-                //this.index = this.store.index("NameIndex");
-                this.isInitialized = true;
-                //this.resolver(this);
-                resolve(this);
+            const makeTableVersion = (ver)=> {
+                var dBOpenRequest;
+                if (!ver) {
+                    dBOpenRequest = indexedDB.open(this.dbName);
+                } else {
+                    dBOpenRequest = indexedDB.open(this.dbName, ver);
+                }
+                this.isInitialized = false;
+            
+
+                dBOpenRequest.onupgradeneeded = (event) =>{
+                    this.db = event.target.result;
+                    this.store = this.db.createObjectStore(this.tableName, {keyPath: "id"});
+                    //this.index = this.store.createIndex("NameIndex", ["name.last", "name.first"]);
+                    this.db.onclose = () => {
+                        evt.trigger("closed")
+                    };
+                };
+                dBOpenRequest.onerror = (event) => {
+                    console.error("Error connecting to DB", event);
+                    reject(new Error("Cannot connect to database"))
+                }
+                dBOpenRequest.onsuccess = (event) => {
+                    // Start a new transaction
+                    const db = dBOpenRequest.result;
+                    this.db = db;
+                    //this.db.objectStoreNames.contains( this.tableName ) || this.db.createObjectStore( this.tableName );
+                    //this.tx = this.db.transaction(this.tableName, "readwrite");
+                    //this.store = this.tx.objectStore(this.tableName);
+                    //this.index = this.store.index("NameIndex");
+                    if (!db.objectStoreNames.contains( this.tableName )) {
+                        db.onclose = () => {
+                            evt.trigger("closed")
+                        };
+                        db.close();
+                        setTimeout(() => {
+                            makeTableVersion(db.version+1);
+                        }, 200);
+
+                        return;
+                    }
+                    this.isInitialized = true;
+                    resolve(this);
+                }
             }
+            makeTableVersion();
+
         });
         return initPromise;
     }
@@ -202,8 +227,8 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
             if (JSON.stringify(prevValue) !== JSON.stringify(value)) isChanged = true;
         }
         return new Promise(async (resolve, reject) => {
-            await initTransaction();
-            var request = this.store.put({id: key, value: value});
+            const transaction = await initTransaction();
+            var request = transaction.store.put({id: key, value: value});
             request.onsuccess = (e)=> {
                 evt.trigger("set", key, value);
                 if (isChanged) {
@@ -229,8 +254,8 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
 
         await this.untilReady();
         return new Promise(async (resolve, reject) => {
-            await initTransaction();
-            var request = this.store.get(key);
+            const transaction = await initTransaction();
+            var request = transaction.store.get(key);
             request.onsuccess = (e)=> {
                 if (!request.result) return resolve();
                 resolve(request.result.value)
@@ -246,8 +271,8 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
     this.getAll = async () => {
         await this.untilReady();
         return new Promise(async (resolve, reject) => {
-            await initTransaction();
-            var request = this.store.getAll();
+            const transaction = await initTransaction();
+            var request = transaction.store.getAll();
             request.onsuccess = (e)=> {
                 if (!request.result) return resolve();
                 let result = {}
@@ -277,8 +302,8 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
         evt.trigger("beforeDelete", key);
 
         return new Promise(async (resolve, reject) => {
-            await initTransaction();
-            var request = this.store.delete(key);
+            const transaction = await initTransaction();
+            var request = transaction.store.delete(key);
             request.onsuccess = (e)=> {
                 evt.trigger("delete", key);
                 resolve(e)
@@ -299,8 +324,8 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
         evt.trigger("beforeClear");
 
         return new Promise(async (resolve, reject) => {
-            await initTransaction();
-            var request = this.store.clear();
+            const transaction = await initTransaction();
+            var request = transaction.store.clear();
             request.onsuccess = (e)=> {
                 evt.trigger("clear", key);
                 resolve(e)
