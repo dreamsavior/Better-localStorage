@@ -23,7 +23,7 @@ declare class BLS {
     get(key:string): Promise<any>;
     getItem(key:string): Promise<any>;
     getAll(): Promise<keyValuePair>;
-    delete(): Promise<Event>;
+    delete(key:string): Promise<Event>;
     clear(): Promise<Event>;
     on(eventName:string, callback:CallbackFunction): void;
     one(eventName:string, callback:CallbackFunction): void;
