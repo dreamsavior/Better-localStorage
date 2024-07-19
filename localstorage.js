@@ -350,6 +350,9 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
                 evt.trigger("drop");
                 resolve(e)
             }
+            request.onblocked = (e)=> {
+                resolve(e)
+            }
             request.onerror = (e)=> {
                 reject(e)
             }
