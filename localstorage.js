@@ -327,7 +327,27 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
             const transaction = await initTransaction();
             var request = transaction.store.clear();
             request.onsuccess = (e)=> {
-                evt.trigger("clear", key);
+                evt.trigger("clear");
+                resolve(e)
+            }
+            request.onerror = (e)=> {
+                reject(e)
+            }
+        })
+    }
+
+    /**
+     * Completely remove the database.
+     * @returns {Promise<Event>} - Transaction event
+     */
+    this.drop = async () => {
+        await this.untilReady();
+        evt.trigger("beforeDrop");
+
+        return new Promise(async (resolve, reject) => {
+            const request = indexedDB.deleteDatabase(this.dbName);
+            request.onsuccess = (e)=> {
+                evt.trigger("drop");
                 resolve(e)
             }
             request.onerror = (e)=> {

@@ -25,6 +25,7 @@ declare class BLS {
     getAll(): Promise<keyValuePair>;
     delete(key:string): Promise<Event>;
     clear(): Promise<Event>;
+    drop(): Promise<Event>;
     on(eventName:string, callback:CallbackFunction): void;
     one(eventName:string, callback:CallbackFunction): void;
     off(eventName:string): void;

@@ -109,6 +109,9 @@ await myStorage.clear();
 // Local database successfully cleared
 ``` 
 
+### `drop()`
+Removes the current database.
+
 ### `on(eventName, callback)`
 
 The `on()` method allows you to add an event listener for a specific event. It takes an `eventName` as a string and a `callback` function to be executed when the event is triggered. Multiple event listeners can be registered for the same event.
