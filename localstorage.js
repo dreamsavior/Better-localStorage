@@ -359,6 +359,14 @@ const BLS = function(dbName="commonDB", tableName="keyValuePairs") {
         })
     }
 
+    /**
+     * Close connection to the database.
+     */
+    this.close = async () => {
+        await this.untilReady();
+        this.db.close();
+    }
+
     this.on = (eventName, fn)=> {
         evt.on(eventName, fn);
     }
